@@ -1,0 +1,19 @@
+{
+  "name": "gastos-personales-be",
+  "version": "1.0.0",
+  "description": "gastos-personales-be",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlondraCordoba/gastos-personales-be.git"
+  },
+  "author": "Alondra Cordoba, Hiram Rubio, Erik Romero",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlondraCordoba/gastos-personales-be/issues"
+  },
+  "homepage": "https://github.com/AlondraCordoba/gastos-personales-be#readme"
+}

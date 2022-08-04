@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,8 +19,13 @@
   },
   "homepage": "https://github.com/AlondraCordoba/gastos-personales-be#readme",
   "dependencies": {
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "ejs": "^3.1.8",
     "express": "^4.18.1",
-    "mongoose": "^6.5.0"
+    "express-openid-connect": "^2.8.0",
+    "express-session": "^1.17.3",
+    "mongoose": "^6.5.0",
+    "passport": "^0.6.0"
   }
 }

@@ -9,7 +9,7 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/app', routes);
+app.use('/', routes);
 
 mongoose.connect(config.NODE_SERVER).then((data) => {
     console.log("Connected to Database");
@@ -17,4 +17,4 @@ mongoose.connect(config.NODE_SERVER).then((data) => {
     console.log(error);
 });
 
-app.listen(process.env.PORT || 5000);
+app.listen(process.env.PORT || 3000);

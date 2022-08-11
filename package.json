@@ -29,7 +29,8 @@
     "express-openid-connect": "^2.8.0",
     "express-session": "^1.17.3",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.5.2",
+    "mongoose": "^5.10.5",
+    "nodemon": "^2.0.19",
     "passport": "^0.6.0"
   }
 }

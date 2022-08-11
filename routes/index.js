@@ -4,19 +4,46 @@ const router = express.Router();
 const Gastos = require('../models/gastos');
 const Categorias = require('../models/categorias');
 const Users = require('../models/user');
+const Ingresos = require('../models/ingresos');
 const bycrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 // Categorias
 
-router.get('/categorias', async (req, res) => {
+router.get('/categorias-gastos', async (req, res) => {
+    try{
+        Users.aggregate([
+            { "$addFields": { "userId": { "$toString": "$_id" }}},
+            {
+                $lookup: {
+                    from: "categorias",
+                    localField: "userId",
+                    foreignField: "idUser",                
+                    as: "categorias_por_usuario"
+                }
+            }
+        ]).exec((err, result)=>{
+            if (err) {
+                console.log("error" ,err)
+            }
+            if (result) {
+                res.send(result);
+            }
+        });
+    }catch(error){
+        res.status(500).send(error);
+    }
+});
+
+router.get('/gastos', async (req, res) => {
     try{
         Categorias.aggregate([
+            { "$addFields": { "cId": { "$toString": "$_id" }}},
             {
                 $lookup: {
                     from: "gastos",
-                    localField: "name",
-                    foreignField: "category",                
+                    localField: "cId",
+                    foreignField: "categoryId",                
                     as: "gastos_por_categoria"
                 }
             }
@@ -31,7 +58,32 @@ router.get('/categorias', async (req, res) => {
     }catch(error){
         res.status(500).send(error);
     }
-})
+});
+
+router.get('/ingresos', async (req, res) => {
+    try{
+        Categorias.aggregate([
+            { "$addFields": { "cId": { "$toString": "$_id" }}},
+            {
+                $lookup: {
+                    from: "ingresos",
+                    localField: "cId",
+                    foreignField: "categoryId",                
+                    as: "ingresos_por_categoria"
+                }
+            }
+        ]).exec((err, result)=>{
+            if (err) {
+                console.log("error" ,err)
+            }
+            if (result) {
+                res.send(result);
+            }
+        });
+    }catch(error){
+        res.status(500).send(error);
+    }
+});
 
 router.post('/post-category', async (req, res) => {
     try{
@@ -40,7 +92,9 @@ router.post('/post-category', async (req, res) => {
             res.send("La categoria ya existe");
         }else{
             const modelg = new Categorias({
-                name: req.body.name
+                name: req.body.name,
+                idUser: req.body.idUser,
+                type: req.body.type
             });
     
             const result = await modelg.save();
@@ -56,11 +110,113 @@ router.post('/post-gasto', async (req, res) => {
         const modelg = new Gastos({
             name: req.body.name,
             money: req.body.money,
-            category: req.body.category
+            categoryId: req.body.categoryId
         });
 
         const result = await modelg.save();
         res.json(result);        
+    }catch(error){
+        res.status(500).send(error);
+    }
+});
+
+router.post('/post-ingreso', async (req, res) => {
+    try{
+        const modelg = new Ingresos({
+            name: req.body.name,
+            money: req.body.money,
+            categoryId: req.body.categoryId
+        });
+
+        const result = await modelg.save();
+        res.json(result);        
+    }catch(error){
+        res.status(500).send(error);
+    }
+});
+
+router.put('/put-category', async (req, res) => {
+    try{
+        const modelc = new Categorias({
+            name: req.body.name,
+            idUser: req.body.idUser,
+            type: req.body.type
+        });
+        const find = await Categorias.findByIdAndUpdate({ _id: req.body.id }, modelc);
+        res.status(201).send({
+            message: "Se edito correctamente",
+            find
+        });        
+    }catch(error){
+        res.status(500).send(error);
+    }
+});
+
+router.put('/put-gasto', async (req, res) => {
+    try{
+        const modelg = new Gastos({
+            name: req.body.name,
+            money: req.body.money,
+            categoryId: req.body.categoryId
+        });
+        const find = await Gastos.findByIdAndUpdate({ _id: req.body.id }, modelg);
+        res.status(201).send({
+            message: "Se edito correctamente",
+            find
+        });        
+    }catch(error){
+        res.status(500).send(error);
+    }
+});
+
+router.put('/put-ingreso', async (req, res) => {
+    try{
+        const modeli = new Ingresos({
+            name: req.body.name,
+            money: req.body.money,
+            categoryId: req.body.categoryId
+        });
+        const find = await Ingresos.findByIdAndUpdate({ _id: req.body.id }, modeli);
+        res.status(201).send({
+            message: "Se edito correctamente",
+            find
+        });        
+    }catch(error){
+        res.status(500).send(error);
+    }
+});
+
+router.delete('/delete-category', async (req, res) => {
+    try{
+        const find = await Categorias.deleteOne({ _id: req.body.id });
+        res.status(201).send({
+            message: "Se elimino correctamente",
+            find
+        });        
+    }catch(error){
+        res.status(500).send(error);
+    }
+});
+
+router.delete('/delete-ingreso', async (req, res) => {
+    try{
+        const find = await Ingresos.deleteOne({ _id: req.body.id });
+        res.status(201).send({
+            message: "Se elimino correctamente",
+            find
+        });        
+    }catch(error){
+        res.status(500).send(error);
+    }
+});
+
+router.delete('/delete-gasto', async (req, res) => {
+    try{
+        const find = await Gastos.deleteOne({ _id: req.body.id });
+        res.status(201).send({
+            message: "Se elimino correctamente",
+            find
+        });        
     }catch(error){
         res.status(500).send(error);
     }

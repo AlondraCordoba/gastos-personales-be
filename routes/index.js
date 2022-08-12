@@ -93,6 +93,7 @@ router.post('/post-category', async (req, res) => {
         }else{
             const modelg = new Categorias({
                 name: req.body.name,
+                monto: req.body.monto,
                 idUser: req.body.idUser,
                 type: req.body.type
             });

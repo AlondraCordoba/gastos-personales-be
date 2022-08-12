@@ -138,11 +138,10 @@ router.post('/post-ingreso', async (req, res) => {
 
 router.put('/put-category', async (req, res) => {
     try{
-        const modelc = new Categorias({
+        const modelc = {
             name: req.body.name,
-            idUser: req.body.idUser,
-            type: req.body.type
-        });
+            monto: req.body.monto
+        };
         const find = await Categorias.findByIdAndUpdate({ _id: req.body.id }, modelc);
         res.status(201).send({
             message: "Se edito correctamente",
@@ -187,9 +186,9 @@ router.put('/put-ingreso', async (req, res) => {
     }
 });
 
-router.delete('/delete-category', async (req, res) => {
+router.delete('/delete-category/:id', async (req, res) => {
     try{
-        const find = await Categorias.deleteOne({ _id: req.body.id });
+        const find = await Categorias.findByIdAndDelete(req.params.id);
         res.status(201).send({
             message: "Se elimino correctamente",
             find

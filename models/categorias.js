@@ -5,6 +5,10 @@ const CategoriasSchema = mongoose.Schema({
         type: String,
         require: true
     },
+    monto: {
+        type: String,
+        require: true
+    },
     idUser: {
         type: String,
         require: true
